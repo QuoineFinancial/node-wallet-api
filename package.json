@@ -1,5 +1,5 @@
 {
-  "name": "@tronprotocol/wallet-api",
+  "name": "tron-wallet-api",
   "version": "0.0.35",
   "description": "Tronprotocol Wallet API wrapper",
   "main": "src/index.js",
