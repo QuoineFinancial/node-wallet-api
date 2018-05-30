@@ -1,5 +1,5 @@
 
-const {EmptyMessage, NumberMessage} = require("../protocol/api/api_pb");
+const { EmptyMessage, NumberMessage } = require("../protocol/api/api_pb");
 
 class GrpcClient {
 
@@ -7,13 +7,18 @@ class GrpcClient {
     this.hostname = options.hostname;
     this.port = options.port;
 
-    const {WalletClient} = require("../protocol/api/api_grpc_pb");
+    const { WalletClient, DatabaseClient } = require("../protocol/api/api_grpc_pb");
     const caller = require('grpc-caller');
 
     /**
      * @type {WalletClient}
      */
-    this.api = caller(`${this.hostname}:${this.port}`, WalletClient);
+    this.walletApi = caller(`${this.hostname}:${this.port}`, WalletClient);
+
+    /**
+     * @type {DatabaseClient}
+     */
+    this.databaseApi = caller(`${this.hostname}:${this.port}`, DatabaseClient);
   }
 
   /**
@@ -22,7 +27,7 @@ class GrpcClient {
    * @returns {Promise<*>}
    */
   async getWitnesses() {
-    return await this.api.listWitnesses(new EmptyMessage())
+    return await this.walletApi.listWitnesses(new EmptyMessage())
       .then(x => x.getWitnessesList());
   }
 
@@ -32,7 +37,7 @@ class GrpcClient {
    * @returns {Promise<*>}
    */
   async getNodes() {
-    return await this.api.listNodes(new EmptyMessage())
+    return await this.walletApi.listNodes(new EmptyMessage())
       .then(x => x.getNodesList());
   }
 
@@ -42,7 +47,7 @@ class GrpcClient {
    * @returns {Promise<*>}
    */
   async getAccounts() {
-    return await this.api.listAccounts(new EmptyMessage())
+    return await this.walletApi.listAccounts(new EmptyMessage())
       .then(x => x.getAccountsList());
   }
 
@@ -56,9 +61,17 @@ class GrpcClient {
   async getBlockByNumber(number) {
     let message = new NumberMessage();
     message.setNum(number);
-    return await this.api.getBlockByNum(message);
+    return await this.walletApi.getBlockByNum(message);
   }
 
+    /**
+   * Retrieves latest block
+   *
+   * @returns {Promise<*>}
+   */
+  async getNowBlock() {
+    return await this.databaseApi.getNowBlock();
+  }
 }
 
 module.exports = GrpcClient;
