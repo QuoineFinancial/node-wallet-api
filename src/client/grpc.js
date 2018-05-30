@@ -70,7 +70,8 @@ class GrpcClient {
    * @returns {Promise<*>}
    */
   async getNowBlock() {
-    return await this.databaseApi.getNowBlock();
+    const message = new EmptyMessage();
+    return await this.databaseApi.getNowBlock(message);
   }
 }
 

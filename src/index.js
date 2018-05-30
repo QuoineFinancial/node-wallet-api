@@ -1,9 +1,9 @@
 const GrpcClient = require("./client/grpc");
 const HttpClient = require("./client/http");
-const normalize = require("./client/normalize");
+const utils = require("./client/utils");
 
 module.exports = {
   GrpcClient,
   HttpClient,
-  normalize,
+  utils,
 };

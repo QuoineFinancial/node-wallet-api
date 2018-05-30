@@ -1,6 +1,7 @@
 const { Block, Transaction, Account } = require("../protocol/core/Tron_pb");
+const { getBase58CheckAddress, signTransaction, privateKeyToAddress, SHA256 } = require("../utils/crypto");
 
-const block = raw => ({
+const normalizeBlock = raw => ({
   parentHash: byteArray2hexStr(raw.getBlockHeader().getRawData().getParenthash()),
   number: raw.getBlockHeader().getRawData().getNumber(),
   witnessAddress: getBase58CheckAddress(Array.from(raw.getBlockHeader().getRawData().getWitnessAddress())),
@@ -10,4 +11,6 @@ const block = raw => ({
   transactions: raw.getTransactionsList().map(deserializeTransaction),
 });
 
-module.exports = { block };
+const getAddressFromPrivateKey = privateKeyToAddress.bind(null);
+
+module.exports = { normalizeBlock, getAddressFromPrivateKey };
