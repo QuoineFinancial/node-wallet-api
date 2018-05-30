@@ -1,5 +1,6 @@
 const { Block, Transaction, Account } = require("../protocol/core/Tron_pb");
 const { getBase58CheckAddress, signTransaction, privateKeyToAddress, SHA256 } = require("../utils/crypto");
+const { base64DecodeFromString, byteArray2hexStr, bytesToString } = require("../utils/bytes");
 
 const normalizeBlock = raw => ({
   parentHash: byteArray2hexStr(raw.getBlockHeader().getRawData().getParenthash()),
